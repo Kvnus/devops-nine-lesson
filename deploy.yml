@@ -1,0 +1,13 @@
+# ========== PLAY 1: Build node ==========
+- name: Build Java application on build node
+  hosts: build
+  become: yes
+  roles:
+    - build
+
+# ========== PLAY 2: Prod node ==========
+- name: Deploy and run Java application on prod node
+  hosts: prod
+  become: yes
+  roles:
+    - deploy
