@@ -35,12 +35,12 @@
 - name: Copy built JAR to artifact directory
   copy:
     src: "{{ build_dir }}/app-src/complete/target/{{ jar_name }}"
-    dest: "{{ artifact_dir }}/app_roles.jar"
+    dest: "{{ artifact_dir }}/app-roles.jar"
     remote_src: yes
     mode: '0644'
 
 - name: Fetch JAR to control node for production deployment
   fetch:
-    src: "{{ artifact_dir }}/app_roles.jar"
+    src: "{{ artifact_dir }}/app-roles.jar"
     dest: "{{ local_artifact_path }}"
     flat: yes
