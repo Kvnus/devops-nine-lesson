@@ -6,3 +6,4 @@ app_jar_local: /tmp/app-roles.jar
 app_jar_name: app-roles.jar
 service_name: java-app-roles
 jre_package: openjdk-17-jre-headless
+app_port: 9090
