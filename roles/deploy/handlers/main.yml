@@ -1,0 +1,9 @@
+---
+- name: reload systemd
+  systemd:
+    daemon_reload: yes
+
+- name: restart java-app-roles
+  systemd:
+    name: "{{ service_name }}"
+    state: restarted
