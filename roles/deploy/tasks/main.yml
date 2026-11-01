@@ -1,0 +1,52 @@
+---
+- name: Install JRE (runtime only)
+  apt:
+    name: "{{ jre_package }}"
+    state: present
+    update_cache: yes
+
+- name: Create application group
+  group:
+    name: "{{ app_group }}"
+    state: present
+
+- name: Create application user
+  user:
+    name: "{{ app_user }}"
+    group: "{{ app_group }}"
+    shell: /usr/sbin/nologin
+    system: yes
+    create_home: no
+
+- name: Create application directory
+  file:
+    path: "{{ app_dir }}"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: '0755'
+
+- name: Copy JAR file to production server
+  copy:
+    src: "{{ app_jar_local }}"
+    dest: "{{ app_dir }}/{{ app_jar_name }}"
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: '0644'
+  notify: restart java-app-roles
+
+- name: Deploy systemd service unit
+  template:
+    src: java-app-roles.service
+    dest: "/etc/systemd/system/{{ service_name }}.service"
+    mode: '0644'
+  notify:
+    - reload systemd
+    - restart java-app-roles
+
+- name: Ensure java-app service is enabled and started
+  systemd:
+    name: "{{ service_name }}"
+    enabled: yes
+    state: started
+    daemon_reload: yes
