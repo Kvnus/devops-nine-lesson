@@ -3,5 +3,5 @@ build_dir: /opt/build-roles
 repo_url: "https://github.com/spring-guides/gs-spring-boot.git"
 maven_branch: main
 artifact_dir: /tmp/java-artifact-roles
-jar_name: spring-boot-0.0.1-SNAPSHOT.jar
+jar_name: spring-boot-complete-0.0.1-SNAPSHOT.jar
 local_artifact_path: /tmp/app-roles.jar
