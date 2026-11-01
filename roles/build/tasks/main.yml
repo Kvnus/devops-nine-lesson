@@ -1,0 +1,46 @@
+---
+- name: Install JDK and Maven
+  apt:
+    name:
+      - openjdk-17-jdk
+      - maven
+    state: present
+    update_cache: yes
+
+- name: Create build workspace
+  file:
+    path: "{{ build_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Clone sample Spring Boot application
+  git:
+    repo: "{{ repo_url }}"
+    dest: "{{ build_dir }}/app-src"
+    version: "{{ maven_branch }}"
+
+- name: Build application with Maven
+  shell: |
+    mvn clean package -DskipTests
+  args:
+    chdir: "{{ build_dir }}/app-src/complete"
+    creates: "{{ build_dir }}/app-src/complete/target/{{ jar_name }}"
+
+- name: Create artifact directory
+  file:
+    path: "{{ artifact_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Copy built JAR to artifact directory
+  copy:
+    src: "{{ build_dir }}/app-src/complete/target/{{ jar_name }}"
+    dest: "{{ artifact_dir }}/app_roles.jar"
+    remote_src: yes
+    mode: '0644'
+
+- name: Fetch JAR to control node for production deployment
+  fetch:
+    src: "{{ artifact_dir }}/app_roles.jar"
+    dest: "{{ local_artifact_path }}"
+    flat: yes

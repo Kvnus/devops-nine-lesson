@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User={{ app_user }}
 WorkingDirectory={{ app_dir }}
-ExecStart=/usr/bin/java -jar {{ app_dir }}/app.jar
+ExecStart=/usr/bin/java -jar {{ app_dir }}/app_reles.jar
 Restart=always
 RestartSec=5
 
